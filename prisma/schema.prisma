@@ -13,10 +13,90 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  AUTHOR
+}
+
 model User {
-  id       String  @id @default(cuid())
-  name     String
-  email    String  @unique
-  password String
-  image    String?
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  role          UserRole @default(AUTHOR)
+  password      String
+  image         String?
+  authored_news News[]
+}
+
+enum PubState {
+  DELETED
+  HIDDEN
+  DRAFT
+}
+
+model News {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(255)
+  description     String?  @db.Text
+  content         String?  @db.Text
+  external_link   String?  @db.VarChar(255)
+  external_author String?  @db.VarChar(255)
+  author_id       String?
+  author          User?    @relation(fields: [author_id], references: [id])
+  media_id        Int?
+  media           Media?   @relation(fields: [media_id], references: [id])
+  pub_state       PubState @default(DRAFT)
+  tags            Tag[]
+  pub_date        DateTime @default(now())
+  imported_from   Rss?     @relation(fields: [rss_id], references: [id])
+  rss_id          Int?
+}
+
+model Media {
+  id     Int    @id @default(autoincrement())
+  src    String @db.VarChar(255)
+  width  Int
+  height Int
+  news   News[]
+}
+
+model Tag {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique @db.VarChar(255)
+  news   News[]
+  rss    Rss[]
+  promos Promo[]
+}
+
+model Rss {
+  id                 Int      @id @default(autoincrement())
+  name               String   @db.VarChar(255)
+  src                String   @db.VarChar(255)
+  last_pub           DateTime @default(now())
+  interval           DateTime @db.Time(0)
+  paused             Boolean  @default(false)
+  should_import_tags Boolean  @default(false)
+  custom_tags        Tag[]
+  custom_fields      Json?
+  news               News[]
+}
+
+enum PromoType {
+  IMAGE
+  TEXT
+  NEWS
+}
+
+model Promo {
+  id                  Int       @id @default(autoincrement())
+  type                PromoType
+  draft               Boolean   @default(true)
+  title               String    @unique @db.VarChar(255)
+  position_priority   Int?      @db.SmallInt
+  pagination_priority Int?      @db.SmallInt
+  list_count          Int?      @db.SmallInt
+  search_count        Int?      @db.SmallInt
+  filter_tag_id       Int?
+  filter_tag          Tag?      @relation(fields: [filter_tag_id], references: [id])
+  search_regexp       String?
 }
