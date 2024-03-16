@@ -1,26 +1,33 @@
 import express, { Express, Request, Response } from "express";
-import Parser from "rss-parser";
-const parser = new Parser({
-  customFields: {
-    item: [
-      ["media:thumbnail", "image"],
-      ["media:content", "media:content"],
-    ],
-  },
-});
+import { deleteTask, intializeCronTasks, updateTask } from "./tasks";
+import { RequestError, errorHandler } from "./errorHandler";
+import { config } from "./config";
 
 const app: Express = express();
-const port = process.env.IMPORTER_PORT || 5001;
+const port = config.IMPORTER_PORT || 5001;
 
-app.get("/", async (req: Request, res: Response) => {
-  const feed = await parser.parseURL(
-    "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
-  );
-  res.json(feed);
+app.post("/task/:id", async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10);
+  if (!id) throw new RequestError(400, "Id must be an integer");
+
+  await updateTask(id);
+  res.status(200).json({ status: 200, msg: "Task has been updated" });
 });
+
+app.delete("/task/:id", async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10);
+  if (!id) throw new RequestError(400, "Id must be an integer");
+
+  await deleteTask(id);
+  res.status(200).json({ status: 200, msg: "Task has been deleted" });
+});
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(
-    `[RSS IMPORTER]: Server is running very good on http://localhost:${port}`
+    `RSS importer Service is running very good on http://localhost:${port}`
   );
 });
+
+intializeCronTasks();

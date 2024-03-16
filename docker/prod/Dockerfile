@@ -18,7 +18,7 @@ COPY next.config.js .
 COPY tsconfig.json .
 COPY tailwind.config.ts .
 COPY postcss.config.js .
-COPY .env.local .
+COPY .env .
 COPY docker/dev/ecosystem.config.js .
 
 # Environment variables must be present at build time
