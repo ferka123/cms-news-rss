@@ -1,11 +1,31 @@
 import { z } from "zod";
 
+export const baseRssItemKeys = [
+  "content",
+  "creator",
+  "categories",
+  "link",
+  "media",
+  "pubDate",
+  "title",
+] as const satisfies readonly RssItemKeys[];
+
+export const rssItemKeys = [
+  ...baseRssItemKeys,
+  "contentSnippet",
+  "isoDate",
+] as const satisfies readonly RssItemKeys[];
+
 export const CustomFieldSchema = z
-  .record(
-    z.string(),
-    z.union([z.tuple([z.string(), z.string()]), z.tuple([z.string()])])
+  .array(
+    z.object({
+      mapKey: z.enum(baseRssItemKeys),
+      rssKey: z.string(),
+      attr: z.string().optional(),
+    })
   )
-  .nullable();
+  .nullable()
+  .default([]);
 
 const DateShema = z
   .string()
@@ -29,15 +49,3 @@ export const RssItemSchema = z.object({
 
 export type RssItem = z.infer<typeof RssItemSchema>;
 export type RssItemKeys = keyof RssItem;
-
-export const rssItemKeys: readonly RssItemKeys[] = [
-  "content",
-  "contentSnippet",
-  "creator",
-  "categories",
-  "isoDate",
-  "link",
-  "media",
-  "pubDate",
-  "title",
-] as const;

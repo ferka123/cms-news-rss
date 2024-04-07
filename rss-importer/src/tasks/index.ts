@@ -38,12 +38,25 @@ export const updateTask = async (id: number) => {
   }
 };
 
-export const deleteTask = async (id: number) => {
-  const task = cronTasks.get(id);
-  if (task) {
-    task.job.stop();
-    cronTasks.delete(id);
-  }
+export const updateMultipleTaskStatus = async (ids: number[], paused: boolean) => {
+  ids.forEach((id) => {
+    const cronTask = cronTasks.get(id);
+    if (cronTask) {
+      if (paused) cronTask.job.start();
+      else cronTask.job.stop();
+      cronTask.paused = paused;
+    }
+  });
+};
+
+export const deleteTasks = async (ids: number[]) => {
+  ids.forEach((id) => {
+    const task = cronTasks.get(id);
+    if (task) {
+      task.job.stop();
+      cronTasks.delete(id);
+    }
+  });
 };
 
 export const intializeCronTasks = async () => {

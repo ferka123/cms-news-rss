@@ -16,16 +16,17 @@ const getFieldMappings = (userFields: unknown) => {
   const fields = CustomFieldSchema.safeParse(userFields);
   if (fields.success) {
     if (fields.data) {
-      Object.entries(fields.data).forEach(([field, [rssField, attr]]) => {
+      fields.data.forEach(({ mapKey, rssKey, attr }) => {
         customFields.push([
-          rssField,
-          field,
+          rssKey,
+          mapKey,
           {
-            keepArray: defaultFieldSettings[field].keepArray ?? false,
-            includeSnippet: defaultFieldSettings[field].includeSnippet ?? false,
+            keepArray: defaultFieldSettings[mapKey].keepArray ?? false,
+            includeSnippet:
+              defaultFieldSettings[mapKey].includeSnippet ?? false,
           },
         ]);
-        if (attr) attributes[field] = attr;
+        if (attr) attributes[mapKey] = attr;
       });
     }
     return { customFields, attributes };

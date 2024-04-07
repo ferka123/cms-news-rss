@@ -4,6 +4,7 @@ export const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]),
   WEB_URL: z.string().min(1),
   WEB_PORT: z.coerce.number().default(3000),
+  IMPORTER_URL: z.string().min(1),
   IMPORTER_PORT: z.coerce.number().default(5001),
   DATABASE_URL: z.string().min(1),
   INTERNAL_NETWORK_DATABASE_URL: z.string().min(1),
