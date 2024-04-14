@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { db } from "../db";
-import { RssParamsSchema } from "./schema";
+import { RssForm, RssParamsSchema } from "./schema";
 import { Prisma } from "@prisma/client";
+import { notFound } from "next/navigation";
 
 export const getRssList = async (state: z.infer<typeof RssParamsSchema>) => {
   const where: Prisma.RssWhereInput = {};
@@ -33,9 +34,19 @@ export const getRssList = async (state: z.infer<typeof RssParamsSchema>) => {
 
 export type RssTableData = Awaited<ReturnType<typeof getRssList>>;
 
-export const getRssById = async (id: number) => {
-  return db.rss.findUnique({
+export const getRssById = async (id: number): Promise<RssForm> => {
+  const res = await db.rss.findUnique({
     include: { custom_tags: true },
     where: { id },
   });
+  if (!res) return notFound();
+
+  return {
+    ...res,
+    custom_tags: res.custom_tags.map(({ name }) => ({
+      label: name,
+      value: name,
+    })),
+    custom_fields: (res.custom_fields || []) as RssForm["custom_fields"],
+  };
 };

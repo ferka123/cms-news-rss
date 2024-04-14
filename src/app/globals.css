@@ -58,3 +58,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+.scrollbars {}
+
+.scrollbars::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbars::-webkit-scrollbar-track {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.scrollbars::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: hsl(var(--input));
+}

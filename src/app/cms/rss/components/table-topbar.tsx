@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RssTableData } from "@/lib/rss/queries";
 import type { RssParams } from "@/lib/rss/schema";
+import Link from "next/link";
 
 type Props = { state: RssTableData["state"] };
 
@@ -96,10 +97,12 @@ const TableTopBar = ({ state }: Props) => {
           </Button>
         )}
       </div>
-      <Button>
-        <span className="hidden mr-2 md:inline">New Source</span>
-        <CirclePlus size={16} />
-      </Button>
+      <Link href={"/cms/rss/create"} scroll={false}>
+        <Button>
+          <span className="hidden mr-2 md:inline">New Source</span>
+          <CirclePlus size={16} />
+        </Button>
+      </Link>
     </div>
   );
 };

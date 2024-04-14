@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { ActionError, action } from "../action-client";
 import { db } from "../db";
 import {
@@ -66,6 +67,7 @@ export const updateSourceStatus = action(
 export const createSource = action(
   RssFormSchema,
   async ({ custom_tags, ...rest }) => {
+
     try {
       const result = await db.rss.create({
         data: {
@@ -117,6 +119,7 @@ export const updateSource = action(
       });
 
       revalidatePath("/cms/rss");
+      revalidatePath(`/cms/rss/${id}`);
 
       return { success: "Rss Source updated" };
     } catch {

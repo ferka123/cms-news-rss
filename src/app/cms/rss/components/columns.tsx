@@ -26,6 +26,7 @@ import { useState } from "react";
 import { deleteSources, updateSourceStatus } from "@/lib/rss/actions";
 import { toast } from "sonner";
 import SortableColumnHeader from "@/components/ui/composed/table/sortable-column-header";
+import Link from "next/link";
 
 const columnHelper = createColumnHelper<RssTableData["data"][number]>();
 
@@ -91,7 +92,9 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center">
             {selectedIds.length <= 1 && (
-              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <Link href={`/cms/rss/${row.original.id}`} scroll={false}>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
             )}
             {selectedIds.length <= 1 ? (
               <DropdownMenuItem
@@ -124,7 +127,7 @@ export const columns = [
                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  this import source
+                  selected import sources
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -137,7 +140,10 @@ export const columns = [
                     });
                     if (res.serverError || res.validationErrors?.ids)
                       toast.error(res.serverError || res.validationErrors?.ids);
-                    if (res.data) toast.success(res.data.message);
+                    if (res.data) {
+                      toast.success(res.data.message);
+                      table.toggleAllRowsSelected(false);
+                    }
                     setShowAlert(false);
                   }}
                 >

@@ -22,14 +22,14 @@ export const CustomFieldsSchema = z
 
 export const RssFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  src: z.string().url(),
+  src: z.string().url("Please enter a valid URL"),
   interval: z.coerce.number().min(1, "Minimum interval is 1 minute"),
   paused: z.boolean(),
   should_import_tags: z.boolean(),
   custom_tags: z.array(OptionSchema).default([]),
   custom_fields: CustomFieldsSchema,
 });
-export type RssForm = z.infer<typeof RssFormSchema>;
+export type RssForm = z.infer<typeof RssFormSchema> & { id?: number };
 
 export const RssFormUpdateSchema = RssFormSchema.partial().merge(
   z.object({ id: z.number().int() })

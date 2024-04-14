@@ -1,6 +1,6 @@
 import React from "react";
 
-const CmsLayout = ({ children }: React.PropsWithChildren) => {
+const CmsLayout = ({ children }: { children: React.ReactNode }) => {
   return <div>{children}</div>;
 };
 
