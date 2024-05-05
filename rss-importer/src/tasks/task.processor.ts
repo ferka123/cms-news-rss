@@ -20,7 +20,7 @@ export const processTask = async (id: number) => {
             (item): Prisma.NewsCreateWithoutImported_fromInput => {
               const tags = task.should_import_tags ? item.categories : [];
               return {
-                pub_state: "ACTIVE",
+                pub_state: "active",
                 title: item.title,
                 external_author: item.creator,
                 external_link: item.link,

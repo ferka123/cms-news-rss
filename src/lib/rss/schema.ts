@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { OptionSchema } from "../common/option";
+import { OptionSchema } from "../common/schemas";
 import { rssMapKeys } from "./data";
 import { SearchParamsSchema } from "../common/search-params";
 import { Prisma } from "@prisma/client";

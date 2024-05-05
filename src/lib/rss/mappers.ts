@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { CustomFieldsSchema, RssForm } from "./schema";
-import { Option } from "../common/option";
+import { Option } from "../common/schemas";
 
 export const rssFormMapper = ({
   name,

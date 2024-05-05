@@ -14,25 +14,25 @@ datasource db {
 }
 
 enum UserRole {
-  ADMIN
-  AUTHOR
+  admin
+  author
 }
 
 model User {
   id            String   @id @default(cuid())
   name          String
   email         String   @unique
-  role          UserRole @default(AUTHOR)
+  role          UserRole @default(author)
   password      String
   image         String?
   authored_news News[]
 }
 
 enum PubState {
-  ACTIVE
-  DELETED
-  HIDDEN
-  DRAFT
+  active
+  deleted
+  hidden
+  draft
 }
 
 model News {
@@ -46,7 +46,7 @@ model News {
   author          User?    @relation(fields: [author_id], references: [id])
   media_id        Int?
   media           Media?   @relation(fields: [media_id], references: [id])
-  pub_state       PubState @default(DRAFT)
+  pub_state       PubState @default(draft)
   tags            Tag[]
   pub_date        DateTime @default(now())
   imported_from   Rss?     @relation(fields: [rss_id], references: [id])
@@ -83,9 +83,9 @@ model Rss {
 }
 
 enum PromoType {
-  IMAGE
-  TEXT
-  NEWS
+  image
+  text
+  news
 }
 
 model Promo {

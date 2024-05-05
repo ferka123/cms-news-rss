@@ -8,6 +8,7 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
+  CommandDialog,
 } from "@/components/ui/command";
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { useEffect, forwardRef } from "react";
@@ -451,7 +452,7 @@ const MultipleSelector = React.forwardRef<
         </div>
         <div className="relative">
           {open && (
-            <CommandList className="absolute mt-2 top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
+            <CommandList className="absolute mt-2 top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in scrollbars">
               {
                 <>
                   {EmptyItem()}
