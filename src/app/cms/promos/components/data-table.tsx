@@ -9,16 +9,19 @@ import {
 import DataTable from "@/components/ui/composed/table/table";
 import { DataTablePagination } from "@/components/ui/composed/table/table-pagination";
 import TableTopBar from "./table-topbar";
-import { NewsTableData } from "@/lib/news/queries";
+import { PromoTableData } from "@/lib/promos/queries";
+import type { PromoSettings } from "@/lib/promos/schema";
 
 interface DataTableProps {
-  columns: ColumnDef<NewsTableData["data"][number]>[];
-  tableData: NewsTableData;
+  columns: ColumnDef<PromoTableData["data"][number]>[];
+  tableData: PromoTableData;
+  settings: PromoSettings;
 }
 
-export function NewsDataTable({
+export function PromoDataTable({
   columns,
   tableData: { data, state },
+  settings,
 }: DataTableProps) {
   const table = useReactTable({
     data: data,
@@ -39,7 +42,7 @@ export function NewsDataTable({
 
   return (
     <div>
-      <TableTopBar state={state} />
+      <TableTopBar state={state} settings={settings} />
       <div className="rounded-md border">
         <DataTable table={table} columns={columns} />
       </div>

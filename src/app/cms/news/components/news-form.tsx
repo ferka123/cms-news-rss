@@ -86,7 +86,21 @@ const NewsPublicationForm = ({ defaultValues, isModal }: Props) => {
             isModal && "max-h-[70vh] overflow-y-auto scrollbars"
           )}
         >
-          <ImageUpload control={form.control} name="media" />
+          <FormField
+            control={form.control}
+            name="media"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormDescription className="sr-only">
+                  Image Upload
+                </FormDescription>
+                <FormControl>
+                  <ImageUpload {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="title"

@@ -1,5 +1,5 @@
 import React from "react";
-import { RssDataTable } from "./components/data-table";
+import { NewsDataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import { getRssList } from "@/lib/rss/queries";
 import { SearchParamProps } from "@/lib/types";
@@ -18,7 +18,7 @@ const RssPage = async ({ searchParams }: SearchParamProps) => {
           <p className="text-muted-foreground">Manage news content</p>
         </div>
       </div>
-      <RssDataTable columns={columns} tableData={data} />
+      <NewsDataTable columns={columns} tableData={data} />
     </div>
   );
 };

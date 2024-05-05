@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../dialog";
+import { cn } from "@/lib/utils";
 
 type Props = {
   children: React.ReactNode;

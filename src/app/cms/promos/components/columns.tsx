@@ -28,68 +28,39 @@ import { useState } from "react";
 import { toast } from "sonner";
 import SortableColumnHeader from "@/components/ui/composed/table/sortable-column-header";
 import Link from "next/link";
-import { NewsTableData } from "@/lib/news/queries";
-import NextImage from "next/image";
+import { PromoTableData } from "@/lib/promos/queries";
+import { promoStateOptions } from "@/lib/promos/data";
+import { deletePromos, updatePromoStatus } from "@/lib/promos/actions";
 import { Badge } from "@/components/ui/badge";
-import { PubState } from "@prisma/client";
-import { deleteNews, updateNewsStatus } from "@/lib/news/actions";
-import { pubStateOptions } from "@/lib/news/data";
 
-const columnHelper = createColumnHelper<NewsTableData["data"][number]>();
+const columnHelper = createColumnHelper<PromoTableData["data"][number]>();
 
 export const columns = [
   renderRowSelect(columnHelper),
-  columnHelper.accessor("media", {
-    size: 100,
-    maxSize: 100,
-    header: () => null,
-    cell: ({ getValue, row }) => {
-      const media = getValue();
-      return media ? (
-        <NextImage
-          className="object-cover rounded-md"
-          src={media.src}
-          alt={row.original.title}
-          width={100}
-          height={100}
-        />
-      ) : (
-        <Image strokeWidth={0.5} size={100} />
-      );
-    },
-  }),
   columnHelper.accessor("title", {
     size: 150,
     header: ({ column }) => (
       <SortableColumnHeader column={column} title="Title" />
     ),
   }),
-  columnHelper.accessor("tags", {
-    header: "Tags",
-    size: 200,
-    cell: ({ getValue }) => (
-      <div className="flex gap-2 flex-wrap">
-        {getValue()
-          .slice(0, 4)
-          .map((tag) => (
-            <Badge variant={"secondary"} className="font-normal" key={tag.id}>
-              {tag.name}
-            </Badge>
-          ))}
-        {getValue().length > 4 && "..."}
-      </div>
-    ),
-  }),
-  columnHelper.accessor("pub_state", {
+  columnHelper.accessor("draft", {
     size: 60,
     header: ({ column }) => (
       <SortableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ getValue }) =>
+      getValue() ? <Badge>{"Draft"}</Badge> : <Badge>{"Active"}</Badge>,
+  }),
+  columnHelper.accessor("type", {
+    size: 60,
+    header: ({ column }) => (
+      <SortableColumnHeader column={column} title="Type" />
     ),
     cell: ({ getValue }) => <span className="capitalize">{getValue()}</span>,
   }),
   columnHelper.accessor("pub_date", {
     header: ({ column }) => (
-      <SortableColumnHeader column={column} title="Published Date" />
+      <SortableColumnHeader column={column} title="Created On" />
     ),
     size: 100,
     cell: ({ getValue }) =>
@@ -104,10 +75,10 @@ export const columns = [
         .rows.map((r) => r.original.id);
       if (selectedIds.length === 0) selectedIds.push(row.original.id);
 
-      const handleUpdateStatus = (pub_state: PubState) => async () => {
-        const res = await updateNewsStatus({
+      const handleUpdateStatus = (draft: boolean) => async () => {
+        const res = await updatePromoStatus({
           ids: selectedIds,
-          pub_state,
+          draft,
         });
         if (res.serverError || res.validationErrors?.ids)
           toast.error(res.serverError || res.validationErrors?.ids);
@@ -130,7 +101,7 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center">
             {selectedIds.length <= 1 && (
-              <Link href={`/cms/news/${row.original.id}`} scroll={false}>
+              <Link href={`/cms/promos/${row.original.id}`} scroll={false}>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
               </Link>
             )}
@@ -138,10 +109,10 @@ export const columns = [
               <DropdownMenuSubTrigger>Change Status</DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  {pubStateOptions.map((state) => (
+                  {promoStateOptions.map((state) => (
                     <DropdownMenuItem
                       onClick={handleUpdateStatus(state.value)}
-                      key={state.value}
+                      key={state.label}
                     >
                       {state.label}
                     </DropdownMenuItem>
@@ -172,7 +143,7 @@ export const columns = [
                 <Button
                   variant="destructive"
                   onClick={async () => {
-                    const res = await deleteNews({
+                    const res = await deletePromos({
                       ids: selectedIds,
                     });
                     if (res.serverError || res.validationErrors?.ids)
@@ -193,4 +164,4 @@ export const columns = [
       );
     },
   }),
-] as ColumnDef<NewsTableData["data"][number]>[];
+] as ColumnDef<PromoTableData["data"][number]>[];

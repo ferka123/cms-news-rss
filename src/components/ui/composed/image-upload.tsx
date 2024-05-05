@@ -1,41 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Ref, useState } from "react";
 import { useCallback } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import Link from "next/link";
 import { Input } from "../input";
 import { Button } from "../button";
 import { CircleX, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  FieldValues,
-  UseControllerProps,
-  useController,
-} from "react-hook-form";
 import { NewsForm } from "@/lib/news/schema";
 import { uploadMedia } from "@/lib/common/actions";
 import { toast } from "sonner";
 
-export default function ImageUpload<T extends FieldValues>(
-  props: UseControllerProps<T>
-) {
+const ImageUpload = React.forwardRef<
+  HTMLInputElement,
+  {
+    value: NewsForm["media"] | null;
+    onChange: (value: NewsForm["media"] | null) => void;
+    ref: Ref<HTMLInputElement>;
+  }
+>(({ value, onChange }, ref) => {
   const [loading, setLoading] = useState(false);
-  const control = useController(props);
-  const selectedImage = control.field.value as NewsForm["media"];
 
   const removeSelectedImage = () => {
-    control.field.onChange(null);
+    onChange(null);
   };
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -53,7 +41,7 @@ export default function ImageUpload<T extends FieldValues>(
           return e?.message || "Failed to upload image";
         },
         success: (res) => {
-          control.field.onChange(res);
+          onChange(res);
           setLoading(false);
           return "Image uploaded successfully";
         },
@@ -78,14 +66,14 @@ export default function ImageUpload<T extends FieldValues>(
   return (
     <div className="flex shrink-0 justify-center items-center gap-4">
       <div className="relative">
-        {selectedImage?.src ? (
+        {value?.src ? (
           <div className="w-[150px] h-[150px] flex">
             <Image
               className="rounded-lg object-cover"
               width={150}
               height={150}
               alt="Image preview"
-              src={selectedImage.src}
+              src={value.src}
             />
             <Button
               onClick={removeSelectedImage}
@@ -113,7 +101,7 @@ export default function ImageUpload<T extends FieldValues>(
               : "border-gray-300 dark:border-gray-700"
           )}
         >
-          {!loading && !selectedImage?.src && fileRejections.length === 0 && (
+          {!loading && !value?.src && fileRejections.length === 0 && (
             <div className=" text-center">
               <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-semibold">Drag an image</span>
@@ -124,7 +112,7 @@ export default function ImageUpload<T extends FieldValues>(
             </div>
           )}
 
-          {!loading && selectedImage?.src && fileRejections.length === 0 && (
+          {!loading && value?.src && fileRejections.length === 0 && (
             <div className="text-center">
               <p className=" text-sm font-semibold">Picture Uploaded</p>
               <p className=" text-xs text-gray-400">
@@ -157,7 +145,10 @@ export default function ImageUpload<T extends FieldValues>(
           accept="image/png, image/jpeg"
           type="file"
         />
+        <input className="sr-only" ref={ref} />
       </div>
     </div>
   );
-}
+});
+
+export default ImageUpload;

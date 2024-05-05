@@ -51,14 +51,16 @@ model News {
   pub_date        DateTime @default(now())
   imported_from   Rss?     @relation(fields: [rss_id], references: [id])
   rss_id          Int?
+  promos          Promo[]
 }
 
 model Media {
-  id     Int    @id @default(autoincrement())
-  src    String @db.VarChar(255)
+  id     Int     @id @default(autoincrement())
+  src    String  @db.VarChar(255)
   width  Int
   height Int
   news   News[]
+  promos Promo[]
 }
 
 model Tag {
@@ -88,16 +90,35 @@ enum PromoType {
   news
 }
 
+enum PromoPlacement {
+  list
+  search
+  both
+}
+
 model Promo {
-  id                  Int       @id @default(autoincrement())
+  id                  Int            @id @default(autoincrement())
   type                PromoType
-  draft               Boolean   @default(true)
-  title               String    @unique @db.VarChar(255)
-  position_priority   Int?      @db.SmallInt
-  pagination_priority Int?      @db.SmallInt
-  list_count          Int?      @db.SmallInt
-  search_count        Int?      @db.SmallInt
+  draft               Boolean        @default(true)
+  title               String         @db.VarChar(255)
+  text                String?        @db.Text
+  href                String?        @db.VarChar(255)
+  href_text           String?        @db.VarChar(255)
+  media_id            Int?
+  media               Media?         @relation(fields: [media_id], references: [id])
+  news_id             Int?
+  news                News?          @relation(fields: [news_id], references: [id])
+  page_placement      PromoPlacement @default(both)
+  position_priority   Int?           @db.SmallInt
+  pagination_priority Int?           @db.SmallInt
   filter_tag_id       Int?
-  filter_tag          Tag?      @relation(fields: [filter_tag_id], references: [id])
+  filter_tag          Tag?           @relation(fields: [filter_tag_id], references: [id])
   search_regexp       String?
+  pub_date            DateTime       @default(now())
+}
+
+model PromoSettings {
+  id           Int @id @default(autoincrement())
+  list_count   Int @default(0) @db.SmallInt
+  search_count Int @default(0) @db.SmallInt
 }
