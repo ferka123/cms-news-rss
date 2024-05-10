@@ -4,6 +4,7 @@ import {
   DEFAULT_LOGGEDIN_REDIRECT,
   LOGIN_ROUTE,
   authRoutes,
+  authorRoutes,
   publicRoutes,
 } from "./routes";
 
@@ -22,6 +23,15 @@ export default auth((req) => {
 
   if (!isLogged && !isPublicRoute)
     return Response.redirect(new URL(LOGIN_ROUTE, req.nextUrl));
+
+  if (req.auth && !isPublicRoute) {
+    if (
+      req.auth.user.role === "author" &&
+      !authorRoutes.find((regex) => regex.test(req.nextUrl.pathname))
+    ) {
+      return Response.redirect(new URL(DEFAULT_LOGGEDIN_REDIRECT, req.nextUrl));
+    }
+  }
 });
 
 export const config = {
