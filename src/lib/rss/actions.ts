@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionError, action } from "../action-client";
+import { ActionError, adminAction } from "../action-client";
 import { db } from "../db";
 import {
   removeImporterSource,
@@ -15,7 +15,7 @@ import {
 } from "./schema";
 import { revalidatePath } from "next/cache";
 
-export const deleteSources = action(MultipleIdSchema, async ({ ids }) => {
+export const deleteSources = adminAction(MultipleIdSchema, async ({ ids }) => {
   if (ids.length === 0) throw new ActionError("No items selected");
 
   const rss = await db.rss.findMany({ where: { id: { in: ids } } });
@@ -36,7 +36,7 @@ export const deleteSources = action(MultipleIdSchema, async ({ ids }) => {
   return { message: "Selected sources have been deleted" };
 });
 
-export const updateSourceStatus = action(
+export const updateSourceStatus = adminAction(
   UpdateSourceStatusSchema,
   async ({ ids, paused }) => {
     if (ids.length === 0) throw new ActionError("No items selected");
@@ -63,7 +63,7 @@ export const updateSourceStatus = action(
   }
 );
 
-export const createSource = action(
+export const createSource = adminAction(
   RssFormSchema,
   async ({ custom_tags, ...rest }) => {
 
@@ -93,7 +93,7 @@ export const createSource = action(
   }
 );
 
-export const updateSource = action(
+export const updateSource = adminAction(
   RssFormUpdateSchema,
   async ({ id, custom_tags, ...rest }) => {
     try {

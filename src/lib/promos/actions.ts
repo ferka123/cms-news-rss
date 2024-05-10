@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionError, action } from "../action-client";
+import { ActionError, adminAction } from "../action-client";
 import { MultipleIdSchema } from "../common/schemas";
 import { db } from "../db";
 import { revalidatePath } from "next/cache";
@@ -12,7 +12,7 @@ import {
 } from "./schema";
 import { Prisma } from "@prisma/client";
 
-export const deletePromos = action(MultipleIdSchema, async ({ ids }) => {
+export const deletePromos = adminAction(MultipleIdSchema, async ({ ids }) => {
   if (ids.length === 0) throw new ActionError("No items selected");
 
   const rss = await db.promo.findMany({ where: { id: { in: ids } } });
@@ -30,7 +30,7 @@ export const deletePromos = action(MultipleIdSchema, async ({ ids }) => {
   return { message: "Selected news have been deleted" };
 });
 
-export const updatePromoStatus = action(
+export const updatePromoStatus = adminAction(
   UpdatePromoStatusSchema,
   async ({ ids, draft }) => {
     if (ids.length === 0) throw new ActionError("No items selected");
@@ -71,7 +71,7 @@ const getCreateInput = ({
   };
 };
 
-export const createPromo = action(
+export const createPromo = adminAction(
   PromoFormSchema,
   async (data): Promise<{ success: string }> => {
     try {
@@ -88,7 +88,7 @@ export const createPromo = action(
   }
 );
 
-export const updatePromo = action(
+export const updatePromo = adminAction(
   PromoFormUpdateSchema,
   async ({ id, ...data }): Promise<{ success: string }> => {
     try {

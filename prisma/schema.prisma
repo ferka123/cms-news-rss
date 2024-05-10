@@ -18,14 +18,22 @@ enum UserRole {
   author
 }
 
+enum UserState {
+  active
+  suspended
+}
+
 model User {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String
-  email         String   @unique
-  role          UserRole @default(author)
+  email         String    @unique
+  role          UserRole  @default(author)
+  state         UserState @default(active)
   password      String
-  image         String?
+  media_id      Int?      @unique
+  media         Media?    @relation(fields: [media_id], references: [id])
   authored_news News[]
+  pub_date      DateTime  @default(now())
 }
 
 enum PubState {
@@ -61,6 +69,7 @@ model Media {
   height Int
   news   News[]
   promos Promo[]
+  User   User?
 }
 
 model Tag {

@@ -20,6 +20,10 @@ export const MultipleIdSchema = z.object({
   ids: z.array(z.number().int()).min(1),
 });
 
+export const MultipleStringIdSchema = z.object({
+  ids: z.array(z.string()).min(1),
+});
+
 export const NumericStringSchema = z
   .union([z.string(), z.number()])
   .optional()

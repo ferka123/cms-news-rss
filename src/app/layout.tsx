@@ -17,8 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={cn("bg-background", roboto.className)}>
+    <html lang="en" className="dark h-full">
+      <body
+        className={cn(
+          "bg-background h-full flex flex-col overflow-y-scroll",
+          roboto.className
+        )}
+      >
         {children}
         <Toaster />
       </body>

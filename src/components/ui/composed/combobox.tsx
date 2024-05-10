@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useDebounce } from "@/hooks/use-debounce";
+import FieldLoader from "./loaders/field-loader";
 
 type Option = { label: string; value: string | number };
 
@@ -94,42 +95,41 @@ const Combobox = <T extends Option>(
         avoidCollisions={false}
       >
         <Command filter={loader ? () => 1 : undefined}>
-          <CommandInput
-            value={inputValue}
-            onValueChange={setInputValue}
-            placeholder={"Search..."}
-            ref={ref}
-          />
-          {loading && (
-            <div className="py-6 text-center text-sm">Loading...</div>
-          )}
+          <div className="relative">
+            <CommandInput
+              value={inputValue}
+              onValueChange={setInputValue}
+              placeholder={"Search..."}
+              ref={ref}
+            />
+            {loading && <FieldLoader className="absolute right-4 top-5" />}
+          </div>
 
           {!loading && <CommandEmpty>No options found</CommandEmpty>}
 
           <CommandList className="scrollbars">
             <CommandGroup>
-              {!loading &&
-                options.map((option, index) => (
-                  <CommandItem
-                    key={`${option.value}${index}`}
-                    value={option.value.toString()}
-                    onSelect={() => {
-                      setSelectedState(option);
-                      if (onChange) onChange(option);
-                      setOpen(false);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        internalSelected?.value === option.value
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {option.label}
-                  </CommandItem>
-                ))}
+              {options.map((option, index) => (
+                <CommandItem
+                  key={`${option.value}${index}`}
+                  value={option.value.toString()}
+                  onSelect={() => {
+                    setSelectedState(option);
+                    if (onChange) onChange(option);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      internalSelected?.value === option.value
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                  {option.label}
+                </CommandItem>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>

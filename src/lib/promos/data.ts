@@ -12,7 +12,7 @@ export const promoTypeOptions = [
 ] as const;
 
 export const promoPagePlacementOptions = [
-  { label: "Both", value: PromoPlacement.both },
+  { label: "List and Search", value: PromoPlacement.both },
   { label: "List", value: PromoPlacement.list },
   { label: "Search", value: PromoPlacement.search },
 ] as const;

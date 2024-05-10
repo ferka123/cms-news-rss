@@ -1,8 +1,8 @@
-import { PubState } from "@prisma/client";
+import type { PubState } from "@prisma/client";
 
-export const pubStateOptions = [
-  { label: "Active", value: PubState.active },
-  { label: "Deleted", value: PubState.deleted },
-  { label: "Draft", value: PubState.draft },
-  { label: "Hidden", value: PubState.hidden },
+export const pubStateOptions: { label: string; value: PubState }[] = [
+  { label: "Active", value: "active" },
+  { label: "Deleted", value: "deleted" },
+  { label: "Draft", value: "draft" },
+  { label: "Hidden", value: "hidden" },
 ] as const;

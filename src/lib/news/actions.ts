@@ -1,12 +1,12 @@
 "use server";
 
-import { ActionError, action } from "../action-client";
+import { ActionError, action, adminAction } from "../action-client";
 import { MultipleIdSchema } from "../common/schemas";
 import { db } from "../db";
 import { revalidatePath } from "next/cache";
 import { UpdateNewsStatusSchema, NewsSchema, NewsUpdateSchema } from "./schema";
 
-export const deleteNews = action(MultipleIdSchema, async ({ ids }) => {
+export const deleteNews = adminAction(MultipleIdSchema, async ({ ids }) => {
   if (ids.length === 0) throw new ActionError("No items selected");
 
   const rss = await db.news.findMany({ where: { id: { in: ids } } });
