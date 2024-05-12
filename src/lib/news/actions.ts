@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionError, action, adminAction } from "../action-client";
+import { ActionError, adminAction, authAction } from "../action-client";
 import { MultipleIdSchema } from "../common/schemas";
 import { db } from "../db";
 import { revalidatePath } from "next/cache";
@@ -24,10 +24,22 @@ export const deleteNews = adminAction(MultipleIdSchema, async ({ ids }) => {
   return { message: "Selected news have been deleted" };
 });
 
-export const updateNewsStatus = action(
+export const updateNewsStatus = authAction(
   UpdateNewsStatusSchema,
-  async ({ ids, pub_state }) => {
+  async ({ ids, pub_state }, { session }) => {
     if (ids.length === 0) throw new ActionError("No items selected");
+
+    if (session.user.role !== "admin") {
+      if (ids.length > 1) throw new ActionError("Not authorized");
+
+      const news = await db.news.findUnique({
+        where: { id: ids[0] },
+        select: { author_id: true },
+      });
+      if (!news) throw new ActionError("News Publication not found");
+      if (news.author_id !== session.user.id)
+        throw new ActionError("Not authorized");
+    }
 
     try {
       await db.news.updateMany({
@@ -48,9 +60,12 @@ export const updateNewsStatus = action(
   }
 );
 
-export const createPublication = action(
+export const createPublication = authAction(
   NewsSchema,
-  async ({ media, tags, ...rest }): Promise<{ success: string }> => {
+  async (
+    { media, tags, ...rest },
+    { session }
+  ): Promise<{ success: string }> => {
     try {
       await db.news.create({
         data: {
@@ -64,6 +79,7 @@ export const createPublication = action(
               }
             : undefined,
           media: media?.id ? { connect: { id: media.id } } : undefined,
+          author: { connect: { id: session.user.id } },
         },
       });
 
@@ -76,10 +92,21 @@ export const createPublication = action(
   }
 );
 
-export const updatePublication = action(
+export const updatePublication = authAction(
   NewsUpdateSchema,
-  async ({ media, tags, id, ...rest }): Promise<{ success: string }> => {
+  async (
+    { media, tags, id, ...rest },
+    { session }
+  ): Promise<{ success: string }> => {
     try {
+      const news = await db.news.findUnique({
+        where: { id },
+        select: { author_id: true },
+      });
+      if (!news) throw new ActionError("News Publication not found");
+      if (news.author_id !== session.user.id)
+        throw new ActionError("Not authorized");
+
       await db.news.update({
         data: {
           ...rest,

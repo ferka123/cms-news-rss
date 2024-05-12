@@ -4,10 +4,14 @@ import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { NewsForm, NewsParamsSchema } from "./schema";
 
-export const getNewsList = async (state: z.infer<typeof NewsParamsSchema>) => {
+export const getNewsList = async (
+  state: z.infer<typeof NewsParamsSchema>,
+  author?: string | null
+) => {
   const where: Prisma.NewsWhereInput = {};
   if (state.q) where.title = { contains: state.q, mode: "insensitive" };
   if (state.status) where.pub_state = state.status;
+  if (author && state.author === "mine") where.author_id = author;
 
   const [data, count] = await db.$transaction([
     db.news.findMany({

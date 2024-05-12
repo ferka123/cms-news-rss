@@ -7,8 +7,10 @@ import {
   authorRoutes,
   publicRoutes,
 } from "./routes";
+import { processEnv } from "./lib/env";
 
 export default auth((req) => {
+  const baseUrl = processEnv.METADATA_BASE_URL;
   const isLogged = !!req.auth;
   const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
@@ -17,19 +19,19 @@ export default auth((req) => {
 
   if (isAuthRoute) {
     if (isLogged)
-      return Response.redirect(new URL(DEFAULT_LOGGEDIN_REDIRECT, req.nextUrl));
+      return Response.redirect(new URL(DEFAULT_LOGGEDIN_REDIRECT, baseUrl));
     return;
   }
 
   if (!isLogged && !isPublicRoute)
-    return Response.redirect(new URL(LOGIN_ROUTE, req.nextUrl));
+    return Response.redirect(new URL(LOGIN_ROUTE, baseUrl));
 
   if (req.auth && !isPublicRoute) {
     if (
       req.auth.user.role === "author" &&
       !authorRoutes.find((regex) => regex.test(req.nextUrl.pathname))
     ) {
-      return Response.redirect(new URL(DEFAULT_LOGGEDIN_REDIRECT, req.nextUrl));
+      return Response.redirect(new URL(DEFAULT_LOGGEDIN_REDIRECT, baseUrl));
     }
   }
 });

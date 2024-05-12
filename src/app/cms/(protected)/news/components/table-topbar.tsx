@@ -11,7 +11,6 @@ import { applyParam, removeParams } from "@/lib/common/search-params";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import type { RssParams } from "@/lib/rss/schema";
 import Link from "next/link";
 import { NewsTableData } from "@/lib/news/queries";
 import { pubStateOptions } from "@/lib/news/data";
@@ -67,7 +66,7 @@ const TableTopBar = ({ state }: Props) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() =>
-                    applyParam<RssParams>(router, searchParams, {
+                    applyParam<NewsParams>(router, searchParams, {
                       status: "",
                     })
                   }
@@ -78,13 +77,18 @@ const TableTopBar = ({ state }: Props) => {
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-        {(state.q || state.status) && (
+        {(state.q || state.status || state.author) && (
           <Button
             variant="ghost"
             type="reset"
             form="name_filter"
             onClick={() =>
-              removeParams<"status">(router, searchParams, ["q", "status"])
+              removeParams<"status" | "author">(router, searchParams, [
+                "q",
+                "status",
+                "author",
+                "page",
+              ])
             }
             className="px-2 lg:px-3"
           >

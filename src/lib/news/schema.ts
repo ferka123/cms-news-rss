@@ -48,6 +48,7 @@ export const NewsParamsSchema = SearchParamsSchema.merge(
       ])
       .optional()
       .catch(""),
+    author: z.enum(["mine", ""]).optional().catch(""),
   })
 );
 
