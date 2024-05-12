@@ -100,7 +100,6 @@ export const updatePromo = adminAction(
 
       return { success: "Promo updated" };
     } catch (e) {
-      console.error(e);
       throw new ActionError("Failed to update Promo");
     }
   }

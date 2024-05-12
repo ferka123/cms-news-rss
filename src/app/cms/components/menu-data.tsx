@@ -1,5 +1,5 @@
 import type { UserRole } from "@prisma/client";
-import { Bolt, Gem, Home, Newspaper, Rss, Users2 } from "lucide-react";
+import { Bolt, Gem, Home, Newspaper, Rss, Tags, Users2 } from "lucide-react";
 
 export type NavItem = {
   title: string;
@@ -20,6 +20,12 @@ export const navItems: NavItem[] = [
     href: "/cms/news",
     icon: <Newspaper className="h-5 w-5" />,
     roles: ["admin", "author"],
+  },
+  {
+    title: "Tags",
+    href: "/cms/tags",
+    icon: <Tags className="h-5 w-5" />,
+    roles: ["admin"],
   },
   {
     title: "Rss",

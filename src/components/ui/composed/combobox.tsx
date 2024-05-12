@@ -30,6 +30,7 @@ type ComboBoxProps<T extends Option> = {
   placeholder?: string;
   className?: string;
   delay?: number;
+  onCreate?: (value: string) => void;
   onChange?: (option: T | null) => void;
   loader?: (q?: string) => Promise<T[]>;
 };
@@ -41,6 +42,7 @@ const Combobox = <T extends Option>(
     delay,
     defaultValue = null,
     placeholder,
+    onCreate,
     onChange,
     className,
     loader,
@@ -72,7 +74,7 @@ const Combobox = <T extends Option>(
     }
   }, [loader, debouncedSearchTerm]);
 
-  const internalSelected = value ?? selectedState;
+  const internalSelected = typeof value !== "undefined" ? value : selectedState;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -109,7 +111,9 @@ const Combobox = <T extends Option>(
             {loading && <FieldLoader className="absolute right-4 top-5" />}
           </div>
 
-          {!loading && <CommandEmpty>No options found</CommandEmpty>}
+          {!loading && !onCreate && (
+            <CommandEmpty>No options found</CommandEmpty>
+          )}
 
           <CommandList className="scrollbars">
             <CommandGroup>
@@ -119,6 +123,7 @@ const Combobox = <T extends Option>(
                   value={option.value.toString()}
                   onSelect={() => {
                     setSelectedState(option);
+                    setInputValue("");
                     if (onChange) onChange(option);
                     setOpen(false);
                   }}
@@ -134,6 +139,22 @@ const Combobox = <T extends Option>(
                   {option.label}
                 </CommandItem>
               ))}
+              {onCreate && inputValue && (
+                <CommandItem
+                  key={`create_${inputValue}`}
+                  value={inputValue}
+                  className="pl-6"
+                  onSelect={() => {
+                    onCreate(inputValue);
+                    setInputValue("");
+                    setSelectedState(null);
+                    if (onChange) onChange(null);
+                    setOpen(false);
+                  }}
+                >
+                  Create "{inputValue}"
+                </CommandItem>
+              )}
             </CommandGroup>
           </CommandList>
         </Command>
