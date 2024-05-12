@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CircleUser, PanelLeft } from "lucide-react";
+import { CircleUser } from "lucide-react";
 import React from "react";
 import { auth } from "@/auth";
 import LogoutMenuItem from "../components/logout-button";
@@ -16,6 +16,28 @@ import Image from "next/image";
 import { SideMenu } from "../components/side-menu";
 import { BreadCrumbs } from "../components/breadcrumbs";
 import { MobileMenu } from "../components/mobile-menu";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "CMS Portal",
+  description: "CMS Portal of the best news website in the world",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    noarchive: true,
+    noimageindex: true,
+    nosnippet: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      nocache: true,
+      noarchive: true,
+      noimageindex: true,
+      nosnippet: true,
+    },
+  },
+};
 
 const CmsLayout = async ({
   children,

@@ -38,7 +38,6 @@ export const getPromoById = async (id: number): Promise<PromoFormData> => {
   const res = await db.promo.findUnique({
     include: {
       media: true,
-      filter_tag: { select: { id: true, name: true } },
       news: { select: { id: true, title: true } },
     },
     where: { id },
@@ -50,9 +49,6 @@ export const getPromoById = async (id: number): Promise<PromoFormData> => {
     title: res.title ?? "",
     search_regexp: res.search_regexp ?? undefined,
     listPlacement: "main",
-    filter_tag: res.filter_tag
-      ? { value: res.filter_tag.id, label: res.filter_tag.name }
-      : undefined,
     news: res.news ? { value: res.news.id, label: res.news.title } : undefined,
     pagination_priority: res.pagination_priority ?? 0,
     position_priority: res.position_priority ?? 0,

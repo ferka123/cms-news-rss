@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { RssForm, RssFormSchema, RssFormUpdateSchema } from "@/lib/rss/schema";
 import MultipleSelector from "@/components/ui/composed/multiselect";
-import { getTagAutocomplete } from "@/lib/tags/actions";
+import { getTagAutocomplete } from "@/lib/tags/queries";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";

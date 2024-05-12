@@ -7,6 +7,7 @@ export const EnvSchema = z.object({
   IMPORTER_URL: z.string().min(1),
   IMPORTER_PORT: z.coerce.number().default(5001),
   DATABASE_URL: z.string().min(1),
+  METADATA_BASE_URL: z.string().url().min(1),
   INTERNAL_NETWORK_DATABASE_URL: z.string().min(1),
   POSTGRES_USER: z.string().min(1),
   POSTGRES_PASSWORD: z.string().min(1),

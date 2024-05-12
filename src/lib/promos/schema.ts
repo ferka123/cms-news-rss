@@ -21,7 +21,7 @@ const BasePromoSchema = z.object({
   position_priority: NumericStringSchema,
   pagination_priority: NumericStringSchema,
   listPlacement: z.enum(["main", "tag"]).optional().default("main"),
-  filter_tag: OptionWithIdSchema.optional(),
+  list_filter: z.boolean().optional(),
   search_regexp: z
     .string()
     .optional()
@@ -74,13 +74,6 @@ const refineSchema = <T extends Partial<z.infer<typeof BasePromoSchema>>>(
         });
       }
       break;
-  }
-  if (data.listPlacement === "tag" && !data.filter_tag) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Tag is required for tag list placement.",
-      path: ["filter_tag"],
-    });
   }
 };
 

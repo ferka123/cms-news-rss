@@ -27,7 +27,7 @@ export const MultipleStringIdSchema = z.object({
 export const NumericStringSchema = z
   .union([z.string(), z.number()])
   .optional()
-  .refine((v) => typeof v === "number" || !v || Number(v), {
+  .refine((v) => typeof v === "number" || !v || !isNaN(Number(v)), {
     message: "Must be a number",
   })
   .transform((v) => (typeof v === "number" ? v : !v ? 0 : Number(v)));

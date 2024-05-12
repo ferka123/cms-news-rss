@@ -58,16 +58,12 @@ const getCreateInput = ({
   media,
   news,
   listPlacement,
-  filter_tag,
   ...data
 }: PromoFormData): Prisma.PromoCreateInput => {
   return {
     ...data,
     media: media?.id ? { connect: { id: media.id } } : undefined,
     news: news?.value ? { connect: { id: news.value } } : undefined,
-    filter_tag: filter_tag?.value
-      ? { connect: { id: filter_tag.value } }
-      : undefined,
   };
 };
 

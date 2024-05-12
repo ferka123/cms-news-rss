@@ -81,11 +81,15 @@ const Combobox = <T extends Option>(
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-full justify-between", className)}
+          className={cn("w-full justify-between px-3", className)}
         >
-          {internalSelected
-            ? internalSelected.label
-            : placeholder ?? "Select..."}
+          {internalSelected ? (
+            internalSelected.label
+          ) : (
+            <span className="text-muted-foreground text-sm">
+              {placeholder ?? "Select..."}
+            </span>
+          )}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

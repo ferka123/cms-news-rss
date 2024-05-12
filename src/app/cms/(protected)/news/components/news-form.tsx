@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import MultipleSelector from "@/components/ui/composed/multiselect";
-import { getTagAutocomplete } from "@/lib/tags/actions";
+import { getTagAutocomplete } from "@/lib/tags/queries";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import {

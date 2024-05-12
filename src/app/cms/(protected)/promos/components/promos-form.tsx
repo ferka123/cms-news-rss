@@ -33,7 +33,7 @@ import {
 } from "@/lib/promos/schema";
 import { promoPagePlacementOptions, promoTypeOptions } from "@/lib/promos/data";
 import Combobox from "@/components/ui/composed/combobox";
-import { newsLoader, tagLoader } from "@/lib/common/option-loaders";
+import { newsLoader } from "@/lib/common/option-loaders";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import NumField from "@/components/ui/composed/numfield";
 import { createPromo, updatePromo } from "@/lib/promos/actions";
@@ -79,7 +79,6 @@ const PromoForm = ({ defaultValues, isModal }: Props) => {
 
   const type = form.watch("type");
   const placement = form.watch("page_placement");
-  const listPlacement = form.watch("listPlacement");
 
   return (
     <Form {...form}>
@@ -282,13 +281,13 @@ const PromoForm = ({ defaultValues, isModal }: Props) => {
               <FormLabel>List Placement Page</FormLabel>
               <Controller
                 control={form.control}
-                name="listPlacement"
+                name="list_filter"
                 render={({ field: { onChange, value } }) => (
                   <ToggleGroup
                     className="self-start py-1"
                     type="single"
-                    value={value || "main"}
-                    onValueChange={onChange}
+                    value={value ? "filter" : "main"}
+                    onValueChange={(value) => onChange(value === "filter")}
                   >
                     <ToggleGroupItem
                       value="main"
@@ -297,7 +296,7 @@ const PromoForm = ({ defaultValues, isModal }: Props) => {
                       Main Page
                     </ToggleGroupItem>
                     <ToggleGroupItem
-                      value="tag"
+                      value="filter"
                       aria-label="Toggle filter by tag"
                     >
                       Filter by tag
@@ -305,28 +304,6 @@ const PromoForm = ({ defaultValues, isModal }: Props) => {
                   </ToggleGroup>
                 )}
               />
-              {listPlacement === "tag" && (
-                <FormField
-                  control={form.control}
-                  name="filter_tag"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Tag</FormLabel>
-                      <FormDescription className="sr-only">
-                        Filter By tag
-                      </FormDescription>
-                      <FormControl>
-                        <Combobox
-                          placeholder="Select Tag"
-                          {...field}
-                          loader={tagLoader}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
               <FormField
                 control={form.control}
                 name="pagination_priority"

@@ -73,11 +73,10 @@ model Media {
 }
 
 model Tag {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique @db.VarChar(255)
-  news   News[]
-  rss    Rss[]
-  promos Promo[]
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+  news News[]
+  rss  Rss[]
 }
 
 model Rss {
@@ -118,10 +117,9 @@ model Promo {
   news_id             Int?
   news                News?          @relation(fields: [news_id], references: [id])
   page_placement      PromoPlacement @default(both)
+  list_filter         Boolean        @default(false)
   position_priority   Int?           @db.SmallInt
   pagination_priority Int?           @db.SmallInt
-  filter_tag_id       Int?
-  filter_tag          Tag?           @relation(fields: [filter_tag_id], references: [id])
   search_regexp       String?
   pub_date            DateTime       @default(now())
 }
