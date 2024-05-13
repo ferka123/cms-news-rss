@@ -5,8 +5,8 @@ import Image from "next/image";
 export function TopAuthors({ data }: { data: TopAuthors }) {
   return (
     <div className="space-y-4">
-      {data.map((author) => (
-        <div key={author.authorId} className="flex items-center gap-2">
+      {data.map((author, index) => (
+        <div key={index} className="flex items-center gap-2 w-full">
           {author.image ? (
             <Image
               className="object-cover rounded-full w-[30px] h-[30px]"

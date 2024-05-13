@@ -93,12 +93,18 @@ model Rss {
   failedImports      FailedImport[]
 }
 
+enum FailedImportType {
+  parsing
+  media_processing
+}
+
 model FailedImport {
-  id        Int      @id @default(autoincrement())
-  rss       Rss      @relation(fields: [rss_id], references: [id])
+  id        Int              @id @default(autoincrement())
+  rss       Rss              @relation(fields: [rss_id], references: [id])
   rss_id    Int
   error     String?
-  createdAt DateTime @default(now())
+  type      FailedImportType
+  createdAt DateTime         @default(now())
 }
 
 enum PromoType {

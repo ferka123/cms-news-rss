@@ -124,7 +124,7 @@ const Dashboard = async () => {
                   <PublicationsChart data={chartData} />
                 </CardContent>
               </Card>
-              <Card className="col-span-2 bg-background">
+              <Card className="col-span-5 lg:col-span-2 bg-background">
                 <CardHeader>
                   <CardTitle>Top Authors</CardTitle>
                   <CardDescription>By publication count</CardDescription>

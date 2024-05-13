@@ -1,12 +1,17 @@
 import Parser from "rss-parser";
 import { prisma } from "../db";
-import { CustomFieldSchema, RssItemSchema, rssItemKeys } from "./schemas";
+import {
+  CustomFieldSchema,
+  RssItem,
+  RssItemSchema,
+  rssItemKeys,
+} from "./schemas";
 import {
   defaultFieldSettings,
   getAttributeDefaults,
   getCustomFieldDefaults,
 } from "./defaults";
-import { DefaultAttributes } from "./types";
+import { DefaultAttributes, ParseError } from "./types";
 import { getLastPubDate, transformToIsoDate, transformValue } from "./utils";
 
 const getFieldMappings = (userFields: unknown) => {
@@ -39,10 +44,10 @@ const getFieldMappings = (userFields: unknown) => {
 };
 
 const transformRssItem = (
-  data: Record<string, unknown>,
+  data: Record<string, Parser.Item>,
   attributes: DefaultAttributes,
   itemDescription = "item"
-) => {
+): RssItem | ParseError => {
   const rssItemObject = Object.fromEntries(
     rssItemKeys.map((key) => [
       key,
@@ -65,7 +70,9 @@ const transformRssItem = (
         2
       )}`
     );
-    return null;
+    return {
+      error: `Failed to parse ${data["guid"] || itemDescription}`,
+    };
   }
 };
 
@@ -88,7 +95,7 @@ export const getNewDataFromRss = async (id: number) => {
 
   const lastPubDate = getLastPubDate(parsedRss.items);
 
-  const parsedItems = parsedRss.items
+  const newItems = parsedRss.items
     .filter(
       (item) =>
         (item.isoDate ?? transformToIsoDate(item.pubDate) ?? "") >
@@ -100,8 +107,13 @@ export const getNewDataFromRss = async (id: number) => {
         attributes,
         `${rss.name}: ${item.title ?? ""}`.trim()
       )
-    )
-    .filter((item): item is NonNullable<typeof item> => Boolean(item));
+    );
 
-  return { parsedItems, lastPubDate, task: rss };
+  const errors = newItems.filter((item): item is ParseError => "error" in item);
+
+  const parsedItems = newItems.filter(
+    (item): item is RssItem => "error" in item === false
+  );
+
+  return { parsedItems, lastPubDate, task: rss, errors };
 };

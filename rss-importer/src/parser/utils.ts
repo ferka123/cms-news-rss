@@ -30,12 +30,14 @@ export const transformToIsoDate = (maybeDate: unknown) => {
   return parsedDate ? new Date(parsedDate).toISOString() : null;
 };
 
-export const getLastPubDate = (items: { isoDate?: string; pubDate?: string }[]) => {
-  let maxDate = new Date(0).toISOString();
-  items.forEach((item) => {
-    const date = item.isoDate ?? transformToIsoDate(item.isoDate);
+export const getLastPubDate = (
+  items: { isoDate?: string; pubDate?: string }[]
+) => {
+  let maxDate = "";
+  for (const item of items) {
+    const date = transformToIsoDate(item.pubDate) || item.isoDate;
     if (!date) return new Date().toISOString();
     if (date > maxDate) maxDate = date;
-  });
-  return maxDate;
+  }
+  return maxDate || new Date().toISOString();
 };

@@ -7,3 +7,5 @@ export type DefaultFieldSettings = {
 };
 
 export type DefaultAttributes = { [key: string]: string };
+
+export type ParseError = { error: string };

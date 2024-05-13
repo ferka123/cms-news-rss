@@ -9,6 +9,7 @@ export const processMedia = async <T extends Pick<RssItem, "media">>(
 ): Promise<
   Omit<T, "media"> & {
     media: null | { src: string; height: number; width: number };
+    mediaError?: string;
   }
 > => {
   try {
@@ -30,6 +31,10 @@ export const processMedia = async <T extends Pick<RssItem, "media">>(
     };
   } catch (e) {
     console.error("Failed to upload image.", e);
-    return { ...item, media: null };
+    return {
+      ...item,
+      media: null,
+      mediaError: `Failed to process ${item.media}`,
+    };
   }
 };
