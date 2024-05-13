@@ -89,62 +89,55 @@ const ImageUpload = React.forwardRef<
           </div>
         )}
       </div>
-      <div {...getRootProps()} className=" flex items-center w-full">
-        <label
-          htmlFor="dropzone-file"
-          className={cn(
-            "relative flex flex-1 flex-col items-center justify-center w-full py-6 border rounded-lg cursor-pointer h-[150px]",
-            isDragAccept
-              ? "border-green-500"
-              : isDragReject || fileRejections.length > 0
-              ? "border-red-500"
-              : "border-gray-300 dark:border-gray-700"
-          )}
-        >
-          {!loading && !value?.src && fileRejections.length === 0 && (
-            <div className=" text-center">
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Drag an image</span>
-              </p>
-              <p className="text-xs text-gray-400 dark:text-gray-400">
-                Click to upload &#40; image should be under 2 MB &#41;
-              </p>
-            </div>
-          )}
+      <div
+        {...getRootProps()}
+        className={cn(
+          "relative flex-1 flex-col justify-center py-6 border rounded-lg cursor-pointer h-[150px] flex items-center w-full",
+          isDragAccept
+            ? "border-green-500"
+            : isDragReject || fileRejections.length > 0
+            ? "border-red-500"
+            : "border-gray-300 dark:border-gray-700"
+        )}
+      >
+        {!loading && !value?.src && fileRejections.length === 0 && (
+          <div className=" text-center">
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="font-semibold">Drag an image</span>
+            </p>
+            <p className="text-xs text-gray-400 dark:text-gray-400">
+              Click to upload &#40; image should be under 2 MB &#41;
+            </p>
+          </div>
+        )}
 
-          {!loading && value?.src && fileRejections.length === 0 && (
-            <div className="text-center">
-              <p className=" text-sm font-semibold">Picture Uploaded</p>
-              <p className=" text-xs text-gray-400">
-                Picture will be uploaded when you save the form
-              </p>
-            </div>
-          )}
+        {!loading && value?.src && fileRejections.length === 0 && (
+          <div className="text-center">
+            <p className=" text-sm font-semibold">Picture Uploaded</p>
+            <p className=" text-xs text-gray-400">
+              Picture will be uploaded when you save the form
+            </p>
+          </div>
+        )}
 
-          {!loading && fileRejections.length > 0 && (
-            <div className=" text-center text-red-500">
-              <p className="mt-2 text-sm">
-                <span className="font-semibold">Image Rejected</span>
-              </p>
-              <p className="text-xs">Image should be under 2 MB</p>
-            </div>
-          )}
+        {!loading && fileRejections.length > 0 && (
+          <div className=" text-center text-red-500">
+            <p className="mt-2 text-sm">
+              <span className="font-semibold">Image Rejected</span>
+            </p>
+            <p className="text-xs">Image should be under 2 MB</p>
+          </div>
+        )}
 
-          {loading && (
-            <div className="text-center">
-              <p className=" text-sm font-semibold">Uploading picture</p>
-              <p className=" text-xs text-gray-400">
-                Please don't close this window
-              </p>
-            </div>
-          )}
-        </label>
-        <Input
-          {...getInputProps()}
-          id="dropzone-file"
-          accept="image/png, image/jpeg"
-          type="file"
-        />
+        {loading && (
+          <div className="text-center">
+            <p className=" text-sm font-semibold">Uploading picture</p>
+            <p className=" text-xs text-gray-400">
+              Please don't close this window
+            </p>
+          </div>
+        )}
+        <Input {...getInputProps()} />
         <input className="sr-only" ref={ref} />
       </div>
     </div>

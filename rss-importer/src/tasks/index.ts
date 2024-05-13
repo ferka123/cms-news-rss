@@ -42,8 +42,8 @@ export const updateMultipleTaskStatus = async (ids: number[], paused: boolean) =
   ids.forEach((id) => {
     const cronTask = cronTasks.get(id);
     if (cronTask) {
-      if (paused) cronTask.job.start();
-      else cronTask.job.stop();
+      if (paused) cronTask.job.stop();
+      else cronTask.job.start();
       cronTask.paused = paused;
     }
   });

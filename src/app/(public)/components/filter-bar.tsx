@@ -6,6 +6,7 @@ import { tagLoader } from "@/lib/common/option-loaders";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Search as SearchIcon } from "lucide-react";
 
 const FilterBar = ({
   defaultValue,
@@ -30,7 +31,7 @@ const FilterBar = ({
         <Combobox
           value={tag}
           onChange={setTag}
-          placeholder="Enter tag"
+          placeholder="Search by tag..."
           className="hover:bg-background"
           loader={tagLoader}
         />
@@ -40,8 +41,9 @@ const FilterBar = ({
           </Button>
         </Link>
       </div>
-      <Button onClick={setUrl} type="button" className="w-20">
-        Filter
+      <Button onClick={setUrl} type="button" className="sm:w-20">
+        <SearchIcon size={20} className="sm:hidden" />
+        <span className="hidden sm:inline">Filter</span>
       </Button>
     </form>
   );

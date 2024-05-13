@@ -20,7 +20,7 @@ export async function generateMetadata({
   const params = filterPageSearchParams.parse(searchParams);
   const tag = params.tag ? await cachedGetTagOptionById(params.tag) : null;
 
-  const popularTags = await cachedGetPopularTags(20, 7);
+  const popularTags = await cachedGetPopularTags(15, 7);
 
   return {
     title: tag?.label ?? "Filter",

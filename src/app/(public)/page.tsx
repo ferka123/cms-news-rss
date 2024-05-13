@@ -11,7 +11,7 @@ import { Metadata } from "next";
 import { cachedGetPopularTags } from "@/lib/tags/queries";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const populartaTags = await cachedGetPopularTags(20, 7);
+  const populartaTags = await cachedGetPopularTags(15, 7);
 
   return {
     title: "Home | News Website",

@@ -32,8 +32,8 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
     <React.Fragment>
       {children}
       <footer className="py-4 bg-muted text-sm">
-        <div className="max-w-screen-2xl mx-auto w-full flex justify-between items-center">
-          <div>
+        <div className="max-w-screen-2xl mx-auto w-full flex justify-between items-center flex-col-reverse gap-3 sm:flex-row">
+          <div className="text-center sm:text-left">
             <h3 className="font-bold">News Website</h3>
             <p>© {new Date().getFullYear()} All rights reserved.</p>
           </div>

@@ -5,6 +5,7 @@ import { signInSchema } from "./schemas";
 import { DEFAULT_LOGGEDIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { z } from "zod";
+import { processEnv } from "../env";
 
 type State = {
   validationErrors?: z.inferFlattenedErrors<typeof signInSchema>["fieldErrors"];
@@ -20,7 +21,10 @@ export const login = async (prevState: State, data: FormData) => {
   try {
     await signIn("credentials", {
       ...parsedData.data,
-      redirectTo: DEFAULT_LOGGEDIN_REDIRECT,
+      redirectTo: new URL(
+        DEFAULT_LOGGEDIN_REDIRECT,
+        processEnv.METADATA_BASE_URL
+      ).toString(),
     });
     return {};
   } catch (error) {
@@ -35,5 +39,5 @@ export const login = async (prevState: State, data: FormData) => {
 };
 
 export const logout = async () => {
-  await signOut({ redirectTo: "/" });
+  await signOut({ redirectTo: processEnv.METADATA_BASE_URL });
 };

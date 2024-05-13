@@ -80,16 +80,25 @@ model Tag {
 }
 
 model Rss {
-  id                 Int      @id @default(autoincrement())
-  name               String   @db.VarChar(255)
-  src                String   @db.VarChar(255)
-  last_pub           DateTime @default("1970-01-01T00:00:00.000Z")
+  id                 Int            @id @default(autoincrement())
+  name               String         @db.VarChar(255)
+  src                String         @db.VarChar(255)
+  last_pub           DateTime       @default("1970-01-01T00:00:00.000Z")
   interval           Int
-  paused             Boolean  @default(false)
-  should_import_tags Boolean  @default(false)
+  paused             Boolean        @default(false)
+  should_import_tags Boolean        @default(false)
   custom_tags        Tag[]
   custom_fields      Json?
   news               News[]
+  failedImports      FailedImport[]
+}
+
+model FailedImport {
+  id        Int      @id @default(autoincrement())
+  rss       Rss      @relation(fields: [rss_id], references: [id])
+  rss_id    Int
+  error     String?
+  createdAt DateTime @default(now())
 }
 
 enum PromoType {

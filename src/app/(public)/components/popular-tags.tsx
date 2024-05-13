@@ -3,7 +3,7 @@ import { cachedGetPopularTags } from "@/lib/tags/queries";
 import Link from "next/link";
 
 export async function PopularTags() {
-  const tags = await cachedGetPopularTags(20, 7);
+  const tags = await cachedGetPopularTags(15, 7);
 
   if (!tags) return null;
 

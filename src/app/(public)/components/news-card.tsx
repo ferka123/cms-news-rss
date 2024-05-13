@@ -28,7 +28,7 @@ export function NewsCard({ card }: { card: NewsCard & BaseCard }) {
           </Badge>
         )}
         {card.image && (
-          <div className="w-full h-[200px] sm:w-[200px] flex-shrink-0 relative mt-4 ml-4">
+          <div className="w-full h-[200px] sm:w-[200px] flex-shrink-0 relative sm:mt-4 sm:ml-4">
             <Image
               className="rounded-md object-cover"
               src={card.image.src}

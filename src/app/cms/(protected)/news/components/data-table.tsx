@@ -60,7 +60,7 @@ export function NewsDataTable({
             <h2 className="text-2xl font-bold tracking-tight">News</h2>
             <p className="text-muted-foreground">Manage news content</p>
           </div>
-          <div className="flex items-center space-x-2 self-start mt-2">
+          <div className="flex items-center space-x-2 self-start p-2">
             <Switch
               checked={filterUser}
               onCheckedChange={(checked) =>

@@ -22,6 +22,11 @@ app.patch("/task/status", async (req: Request, res: Response) => {
     throw new RequestError(400, body.error.flatten().formErrors.join(", "));
 
   await updateMultipleTaskStatus(body.data.ids, body.data.paused);
+  console.log(
+    `[Importer] Tasks ${body.data.ids} have been ${
+      body.data.paused ? "paused" : "resumed"
+    }`
+  );
   res.status(200).json({ status: 200, msg: "Task statuses have been updated" });
 });
 
@@ -30,6 +35,7 @@ app.post("/task/:id", async (req: Request, res: Response) => {
   if (!id) throw new RequestError(400, "Id must be an integer");
 
   await updateTask(id);
+  console.log(`[Importer] Task ${id} has been updated`);
   res.status(200).json({ status: 200, msg: "Task has been updated" });
 });
 
@@ -40,6 +46,7 @@ app.delete("/task", async (req: Request, res: Response) => {
     throw new RequestError(400, body.error.flatten().formErrors.join(", "));
 
   await deleteTasks(body.data.ids);
+  console.log(`[Importer] Tasks ${body.data.ids} have been updated`);
   res.status(200).json({ status: 200, msg: "Tasks have been deleted" });
 });
 
