@@ -60,7 +60,7 @@ export const columns = [
   columnHelper.display({
     id: "actions",
     size: 50,
-    cell: ({ row, table }) => {
+    cell: function Cell({ row, table }) {
       const selectedIds = table
         .getFilteredSelectedRowModel()
         .rows.map((r) => r.original.id);

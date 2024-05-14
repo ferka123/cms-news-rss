@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Image, MoreHorizontal } from "lucide-react";
+import { Image as ImageIcon, MoreHorizontal } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -45,7 +45,7 @@ export const getColumns = (user: User) => {
       size: 100,
       maxSize: 100,
       header: () => null,
-      cell: ({ getValue, row }) => {
+      cell: function Cell({ getValue, row }) {
         const media = getValue();
         return media ? (
           <NextImage
@@ -56,7 +56,7 @@ export const getColumns = (user: User) => {
             height={100}
           />
         ) : (
-          <Image strokeWidth={0.5} size={100} />
+          <ImageIcon strokeWidth={0.5} size={100} />
         );
       },
     }),
@@ -100,7 +100,7 @@ export const getColumns = (user: User) => {
     columnHelper.display({
       id: "actions",
       size: 50,
-      cell: ({ row, table }) => {
+      cell: function Cell({ row, table }) {
         const [showAlert, setShowAlert] = useState(false);
 
         if (user.role !== "admin" && row.original.author_id !== user.id)

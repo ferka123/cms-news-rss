@@ -4,6 +4,7 @@ import { getUserByEmail } from "./lib/user/queries";
 import { verifyPassword } from "./lib/user/utils";
 import { signInSchema } from "./lib/auth/schemas";
 import type { UserRole } from "@prisma/client";
+import { processEnv } from "./lib/env";
 
 declare module "next-auth" {
   interface User {
@@ -36,6 +37,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
+    redirect: async ({ url }) =>
+      new URL(url, processEnv.METADATA_BASE_URL).toString(),
   },
   providers: [
     Credentials({

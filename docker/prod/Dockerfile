@@ -12,14 +12,17 @@ RUN npm ci
 
 COPY src ./src
 COPY rss-importer ./rss-importer
+COPY shared ./shared
 COPY prisma ./prisma
 COPY public ./public
-COPY next.config.js .
+COPY next.config.mjs .
 COPY tsconfig.json .
 COPY tailwind.config.ts .
 COPY postcss.config.js .
 COPY .env .
-COPY docker/dev/ecosystem.config.js .
+COPY docker/prod/ecosystem.config.js .
+
+RUN npm install pm2 -g
 
 # Environment variables must be present at build time
 # https://github.com/vercel/next.js/discussions/14030
@@ -27,7 +30,9 @@ ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN npx prisma generate
+
+RUN npx prisma db push
+RUN npx prisma db seed
 
 # Build Next.js based on the preferred package manager
 RUN npm run build
