@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: docker/dev/Dockerfile
+    command: sh -c "npx prisma db push && npx prisma db seed && exec pm2-runtime ecosystem.config.js"
     environment:
        - NODE_ENV=development 
        - WATCHPACK_POLLING=true
@@ -16,6 +17,7 @@ services:
       - ./src:/app/src
       - ./public:/app/public
       - ./rss-importer:/app/rss-importer
+      - ./shared:/app/shared
       - ./prisma:/app/prisma
     restart: always
     depends_on:

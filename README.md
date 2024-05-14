@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# News Web Site + Admin UI
 
-## Getting Started
+#### Описание задачи
 
-First, run the development server:
+Цель проекта состоит в разработке новостного сайта и системы управления контентом (CMS) к нему. Основными особенностями проекта: SEO оптимизация (техническая), ARIA оптимизация, возможность указания источников RSS для импорта новостей со сторонних ресурсов, возможность "подмешивания" рекламных блоков в список новостей.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+#### Running web app in docker
+
+```
+fill .env using .env.example
+docker-compose -f docker-compose.dev.yml build
+docker-compose -f docker-compose.dev.yml up -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Building app locally
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+fill .env using .env.example
+npm i
+docker-compose -f docker-compose.dev.yml build
+docker-compose -f docker-compose.dev.yml up db
+npx prisma db push
+npx prisma db seed
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+#### Seting up s3 minio region
 
-## Learn More
+```
+go to http://localhost:9001/
+enter credentials from env file
+go to settings and set up s3 region from env file
+```
 
-To learn more about Next.js, take a look at the following resources:
+#### Starting app locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+npm run local-start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Starting app locally in dev mode
 
-## Deploy on Vercel
+```
+npm run local-dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### CMS Portal route
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+  /cms
+```
+
+#### Default Credentials
+
+```
+  admin@news.com 12345678
+  user@news.com 12345678
+```

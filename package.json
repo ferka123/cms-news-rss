@@ -12,6 +12,9 @@
     "importer-start": "ts-node rss-importer/src/server.ts",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.529.1",
     "@hookform/resolvers": "^3.3.4",
