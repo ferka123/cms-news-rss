@@ -25,8 +25,9 @@ const TableTopBar = ({ state, settings }: Props) => {
 
   return (
     <div className="flex items-center justify-between pb-4 space-x-4">
-      <div className="flex space-x-4">
+      <div className="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
         <form
+          className="w-full sm:w-auto"
           id="name_filter"
           onSubmit={(e) => {
             e.preventDefault();
@@ -40,12 +41,11 @@ const TableTopBar = ({ state, settings }: Props) => {
             placeholder="Filter by name..."
             name="name_filter"
             defaultValue={state.q}
-            className="max-w-sm"
           />
         </form>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto capitalize">
+            <Button variant="outline" className="capitalize flex-1">
               {state.status ? `show ${state.status}` : "Filter Status"}
             </Button>
           </DropdownMenuTrigger>
@@ -80,7 +80,7 @@ const TableTopBar = ({ state, settings }: Props) => {
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto capitalize">
+            <Button variant="outline" className="capitalize flex-1">
               {state.type ? `show ${state.type}` : "Filter Type"}
             </Button>
           </DropdownMenuTrigger>
@@ -132,7 +132,7 @@ const TableTopBar = ({ state, settings }: Props) => {
           </Button>
         )}
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 self-baseline">
         <PromoSettingsForm settings={settings} />
         <Link href={"/cms/promos/create"} scroll={false}>
           <Button>

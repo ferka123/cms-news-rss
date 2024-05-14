@@ -62,13 +62,12 @@ export const columns = [
     header: ({ column }) => (
       <SortableColumnHeader column={column} title="Created On" />
     ),
-    size: 100,
+    meta: { className: "hidden md:table-cell" },
     cell: ({ getValue }) =>
       getValue().getTime() === 0 ? "N/A" : dateFormatter.format(getValue()),
   }),
   columnHelper.display({
     id: "actions",
-    size: 50,
     cell: function Cell({ row, table }) {
       const selectedIds = table
         .getFilteredSelectedRowModel()
@@ -94,7 +93,7 @@ export const columns = [
           }}
         >
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="outline" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
