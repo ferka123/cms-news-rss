@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 type Props<TData> = {
   table: TableProps<TData>;
@@ -29,7 +30,10 @@ const DataTable = <TData,>({ table, columns, className }: Props<TData>) => {
               return (
                 <TableHead
                   key={header.id}
-                  style={{ width: `${header.getSize()}px` }}
+                  className={cn(
+                    header.column.columnDef.meta?.className,
+                    "p-3 sm:p-4"
+                  )}
                 >
                   {header.isPlaceholder
                     ? null
@@ -53,7 +57,10 @@ const DataTable = <TData,>({ table, columns, className }: Props<TData>) => {
               {row.getVisibleCells().map((cell) => (
                 <TableCell
                   key={cell.id}
-                  style={{ width: `${cell.column.getSize()}px` }}
+                  className={cn(
+                    cell.column.columnDef.meta?.className,
+                    "p-3 sm:p-4"
+                  )}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>

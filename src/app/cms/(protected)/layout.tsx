@@ -49,7 +49,7 @@ const CmsLayout = async ({
   return (
     <div className="flex-1 max-w-screen-2xl mx-auto w-full h-full flex md:px-2">
       <SideMenu role={role} />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-[calc(100%-3.5rem)]">
         <header className="bg-muted/40 flex justify-between h-14 items-center gap-4 border-b p-4 sm:static sm:h-auto sm:border-0 ">
           <MobileMenu role={role} />
           <BreadCrumbs />

@@ -59,8 +59,16 @@ const Dashboard = async () => {
                     {imoprtedNews.thisPeriodCount}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {Math.sign(imoprtedNews.percentageChange) === 1 ? "+" : ""}
-                    {imoprtedNews.percentageChange.toFixed(2)}% from last week
+                    {imoprtedNews.percentageChange === Infinity
+                      ? "Increased from 0 last week"
+                      : `${
+                          Math.sign(imoprtedNews.percentageChange) === 1
+                            ? "+"
+                            : ""
+                        }
+                    ${imoprtedNews.percentageChange.toFixed(
+                      2
+                    )}% from last week`}
                   </p>
                 </CardContent>
               </Card>
@@ -76,8 +84,16 @@ const Dashboard = async () => {
                     {failedImports.thisPeriodCount}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {Math.sign(failedImports.percentageChange) === 1 ? "+" : ""}
-                    {failedImports.percentageChange.toFixed(2)}% from last week
+                    {failedImports.percentageChange === Infinity
+                      ? "Increased from 0 last week"
+                      : `${
+                          Math.sign(failedImports.percentageChange) === 1
+                            ? "+"
+                            : ""
+                        }
+                    ${failedImports.percentageChange.toFixed(
+                      2
+                    )}% from last week`}
                   </p>
                 </CardContent>
               </Card>
@@ -94,8 +110,16 @@ const Dashboard = async () => {
                     {publishedNews.thisPeriodCount}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {Math.sign(publishedNews.percentageChange) === 1 ? "+" : ""}
-                    {publishedNews.percentageChange.toFixed(2)}% from last week
+                    {publishedNews.percentageChange === Infinity
+                      ? "Increased from 0 last week"
+                      : `${
+                          Math.sign(imoprtedNews.percentageChange) === 1
+                            ? "+"
+                            : ""
+                        }
+                    ${publishedNews.percentageChange.toFixed(
+                      2
+                    )}% from last week`}
                   </p>
                 </CardContent>
               </Card>

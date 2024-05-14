@@ -43,13 +43,14 @@ export const getColumns = (user: User) => {
     ...(user.role === "admin" ? [renderRowSelect(columnHelper)] : []),
     columnHelper.accessor("media", {
       size: 100,
-      maxSize: 100,
+      minSize: 100,
+      meta: { className: "hidden md:table-cell" },
       header: () => null,
       cell: function Cell({ getValue, row }) {
         const media = getValue();
         return media ? (
           <NextImage
-            className="object-cover rounded-md"
+            className="object-cover rounded-md min-w-14"
             src={media.src}
             alt={row.original.title}
             width={100}
@@ -61,7 +62,7 @@ export const getColumns = (user: User) => {
       },
     }),
     columnHelper.accessor("title", {
-      size: 150,
+      meta: { className: "min-w-[175px]" },
       header: ({ column }) => (
         <SortableColumnHeader column={column} title="Title" />
       ),
@@ -69,6 +70,7 @@ export const getColumns = (user: User) => {
     columnHelper.accessor("tags", {
       header: "Tags",
       size: 200,
+      meta: { className: "hidden lg:table-cell" },
       cell: ({ getValue }) => (
         <div className="flex gap-2 flex-wrap">
           {getValue()
@@ -99,7 +101,6 @@ export const getColumns = (user: User) => {
     }),
     columnHelper.display({
       id: "actions",
-      size: 50,
       cell: function Cell({ row, table }) {
         const [showAlert, setShowAlert] = useState(false);
 
@@ -128,7 +129,7 @@ export const getColumns = (user: User) => {
             }}
           >
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="outline" className="h-8 w-8 p-0">
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>

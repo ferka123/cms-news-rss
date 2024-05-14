@@ -51,17 +51,19 @@ export const columns = [
     ),
     cell: ({ getValue, row }) => (
       <div className="flex items-center gap-2">
-        {row.original.media?.src ? (
-          <NextImage
-            className="object-cover rounded-full w-[30px] h-[30px]"
-            src={row.original.media.src}
-            alt={row.original.name}
-            width={30}
-            height={30}
-          />
-        ) : (
-          <CircleUser strokeWidth={1} size={30} />
-        )}
+        <span className="hidden sm:inline">
+          {row.original.media?.src ? (
+            <NextImage
+              className="object-cover rounded-full w-[30px] h-[30px] flex-shrink-0"
+              src={row.original.media.src}
+              alt={row.original.name}
+              width={30}
+              height={30}
+            />
+          ) : (
+            <CircleUser className="flex-shrink-0" strokeWidth={1} size={30} />
+          )}
+        </span>
         <span>{getValue()}</span>
       </div>
     ),
@@ -95,13 +97,12 @@ export const columns = [
     header: ({ column }) => (
       <SortableColumnHeader column={column} title="Creation Date" />
     ),
-    size: 70,
+    meta: { className: "hidden md:table-cell" },
     cell: ({ getValue }) =>
       getValue().getTime() === 0 ? "N/A" : dateFormatter.format(getValue()),
   }),
   columnHelper.display({
     id: "actions",
-    size: 50,
     cell: function Cell({ row, table }) {
       const [showDeleteAlert, setShowDeleteAlert] = useState(false);
       const [stateAlert, setStateAlert] = useState<UserState | null>(null);
@@ -161,7 +162,7 @@ export const columns = [
           }}
         >
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="outline" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
