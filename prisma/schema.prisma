@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  author
+}
+
+enum UserState {
+  active
+  suspended
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  role          UserRole  @default(author)
+  state         UserState @default(active)
+  password      String
+  media_id      Int?      @unique
+  media         Media?    @relation(fields: [media_id], references: [id])
+  authored_news News[]
+  pub_date      DateTime  @default(now())
+}
+
+enum PubState {
+  active
+  deleted
+  hidden
+  draft
+}
+
+model News {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(255)
+  description     String?  @db.Text
+  content         String?  @db.Text
+  external_link   String?  @db.VarChar(255)
+  external_author String?  @db.VarChar(255)
+  author_id       String?
+  author          User?    @relation(fields: [author_id], references: [id])
+  media_id        Int?
+  media           Media?   @relation(fields: [media_id], references: [id])
+  pub_state       PubState @default(draft)
+  tags            Tag[]
+  pub_date        DateTime @default(now())
+  imported_from   Rss?     @relation(fields: [rss_id], references: [id])
+  rss_id          Int?
+  promos          Promo[]
+}
+
+model Media {
+  id     Int     @id @default(autoincrement())
+  src    String  @db.VarChar(255)
+  width  Int
+  height Int
+  news   News[]
+  promos Promo[]
+  User   User?
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+  news News[]
+  rss  Rss[]
+}
+
+model Rss {
+  id                 Int            @id @default(autoincrement())
+  name               String         @db.VarChar(255)
+  src                String         @db.VarChar(255)
+  last_pub           DateTime       @default("1970-01-01T00:00:00.000Z")
+  interval           Int
+  paused             Boolean        @default(false)
+  should_import_tags Boolean        @default(false)
+  custom_tags        Tag[]
+  custom_fields      Json?
+  news               News[]
+  failedImports      FailedImport[]
+}
+
+enum FailedImportType {
+  parsing
+  media_processing
+}
+
+model FailedImport {
+  id        Int              @id @default(autoincrement())
+  rss       Rss              @relation(fields: [rss_id], references: [id])
+  rss_id    Int
+  error     String?
+  type      FailedImportType
+  createdAt DateTime         @default(now())
+}
+
+enum PromoType {
+  image
+  text
+  news
+}
+
+enum PromoPlacement {
+  list
+  search
+  both
+}
+
+model Promo {
+  id                  Int            @id @default(autoincrement())
+  type                PromoType
+  draft               Boolean        @default(true)
+  title               String         @db.VarChar(255)
+  text                String?        @db.Text
+  href                String?        @db.VarChar(255)
+  href_text           String?        @db.VarChar(255)
+  media_id            Int?
+  media               Media?         @relation(fields: [media_id], references: [id])
+  news_id             Int?
+  news                News?          @relation(fields: [news_id], references: [id])
+  page_placement      PromoPlacement @default(both)
+  list_filter         Boolean        @default(false)
+  position_priority   Int?           @db.SmallInt
+  pagination_priority Int?           @db.SmallInt
+  search_regexp       String?
+  pub_date            DateTime       @default(now())
+}
+
+model PromoSettings {
+  id           Int @id @default(autoincrement())
+  list_count   Int @default(0) @db.SmallInt
+  search_count Int @default(0) @db.SmallInt
+}
