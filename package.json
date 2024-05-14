@@ -8,7 +8,7 @@
     "web-dev": "next dev",
     "importer-dev": "nodemon --watch rss-importer --legacy-watch -P 1000 rss-importer/src/server.ts",
     "build": "next build",
-    "web-start": "next start",
+    "web-start": "node .next/standalone/server.js",
     "importer-start": "ts-node rss-importer/src/server.ts",
     "lint": "next lint"
   },

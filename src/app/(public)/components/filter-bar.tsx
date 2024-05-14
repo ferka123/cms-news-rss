@@ -18,7 +18,7 @@ const FilterBar = ({
 
   const setUrl = useCallback(
     () => router.push(tag?.value ? `/filter?tag=${tag?.value}` : "/filter"),
-    [tag]
+    [tag, router]
   );
 
   useEffect(() => {

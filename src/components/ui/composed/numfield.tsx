@@ -36,4 +36,6 @@ const NumField = React.forwardRef<
   );
 });
 
+NumField.displayName = "NumField";
+
 export default NumField;

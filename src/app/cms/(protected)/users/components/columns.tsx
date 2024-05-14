@@ -102,7 +102,7 @@ export const columns = [
   columnHelper.display({
     id: "actions",
     size: 50,
-    cell: ({ row, table }) => {
+    cell: function Cell({ row, table }) {
       const [showDeleteAlert, setShowDeleteAlert] = useState(false);
       const [stateAlert, setStateAlert] = useState<UserState | null>(null);
       const [roleAlert, setRoleAlert] = useState<UserRole | null>(null);

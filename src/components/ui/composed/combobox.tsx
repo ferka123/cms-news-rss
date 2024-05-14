@@ -152,7 +152,7 @@ const Combobox = <T extends Option>(
                     setOpen(false);
                   }}
                 >
-                  Create "{inputValue}"
+                  Create &quot;{inputValue}&quot;
                 </CommandItem>
               )}
             </CommandGroup>

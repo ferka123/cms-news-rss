@@ -4,7 +4,7 @@ module.exports = {
       name: "web",
       instances: 1,
       cwd: "/app",
-      script: "server.js",
+      script: ".next/standalone/server.js",
     },
     {
       name: "importer",

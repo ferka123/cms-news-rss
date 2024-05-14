@@ -26,28 +26,31 @@ const ImageUpload = React.forwardRef<
     onChange(null);
   };
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      if (loading) return;
-      const selectedImage = acceptedFiles[0];
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        if (loading) return;
+        const selectedImage = acceptedFiles[0];
 
-      const formData = new FormData();
-      formData.append("file", selectedImage);
-      setLoading(true);
-      toast.promise(uploadMedia(formData), {
-        loading: "Uploading image...",
-        error: (e) => {
-          setLoading(false);
-          return e?.message || "Failed to upload image";
-        },
-        success: (res) => {
-          onChange(res);
-          setLoading(false);
-          return "Image uploaded successfully";
-        },
-      });
-    }
-  }, []);
+        const formData = new FormData();
+        formData.append("file", selectedImage);
+        setLoading(true);
+        toast.promise(uploadMedia(formData), {
+          loading: "Uploading image...",
+          error: (e) => {
+            setLoading(false);
+            return e?.message || "Failed to upload image";
+          },
+          success: (res) => {
+            onChange(res);
+            setLoading(false);
+            return "Image uploaded successfully";
+          },
+        });
+      }
+    },
+    [loading, onChange]
+  );
 
   const {
     getRootProps,
@@ -133,7 +136,7 @@ const ImageUpload = React.forwardRef<
           <div className="text-center">
             <p className=" text-sm font-semibold">Uploading picture</p>
             <p className=" text-xs text-gray-400">
-              Please don't close this window
+              Please don&apos;t close this window
             </p>
           </div>
         )}
@@ -143,5 +146,7 @@ const ImageUpload = React.forwardRef<
     </div>
   );
 });
+
+ImageUpload.displayName = "ImageUpload";
 
 export default ImageUpload;
