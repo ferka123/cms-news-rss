@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { db } from "../db";
 import { UserForm, UserListParams } from "./schema";
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 
 export const getUserByEmail = async (email: string) => {
   return db.user.findUnique({
@@ -17,6 +18,25 @@ export const getUserByEmail = async (email: string) => {
     },
   });
 };
+
+export const getUserById = async (id: string) => {
+  return db.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      state: true,
+      media: true,
+    },
+  });
+};
+
+export const getUserByIdCached = (id: string) =>
+  unstable_cache(getUserById, undefined, {
+    tags: [`user:${id}`],
+  })(id);
 
 export const getUserList = async (state: UserListParams) => {
   const where: Prisma.UserWhereInput = {};

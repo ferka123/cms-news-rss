@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import {
   API_AUTH_PREFIX,
   DEFAULT_LOGGEDIN_REDIRECT,
@@ -9,7 +9,7 @@ import {
 } from "./routes";
 import { processEnv } from "./lib/env";
 
-export default auth((req) => {
+export default auth(async (req) => {
   const baseUrl = processEnv.METADATA_BASE_URL;
   const isLogged = !!req.auth;
   const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);

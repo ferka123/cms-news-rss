@@ -3,7 +3,7 @@
 import { ActionError, adminAction } from "../action-client";
 import { MultipleStringIdSchema } from "../common/schemas";
 import { db } from "../db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import {
   UserRoleSchema,
   UserSchema,
@@ -132,6 +132,7 @@ export const updateUser = adminAction(
       });
 
       revalidatePath("/cms/users");
+      revalidateTag(`user:${id}`);
 
       return { success: "User has been updated" };
     } catch {

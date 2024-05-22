@@ -10,13 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CircleUser } from "lucide-react";
 import React from "react";
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import LogoutMenuItem from "../components/logout-button";
 import Image from "next/image";
 import { SideMenu } from "../components/side-menu";
 import { BreadCrumbs } from "../components/breadcrumbs";
 import { MobileMenu } from "../components/mobile-menu";
 import { Metadata } from "next";
+import { getUserByIdCached } from "@/lib/user/queries";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "CMS Portal",
@@ -45,7 +47,10 @@ const CmsLayout = async ({
   children: React.ReactNode;
 }>) => {
   const session = await auth();
+  if (!session?.user?.id) redirect("/");
   const role = session?.user?.role ?? "author";
+  const user = await getUserByIdCached(session?.user?.id);
+  const userPic = user?.media?.src ?? session.user.image;
   return (
     <div className="flex-1 max-w-screen-2xl mx-auto w-full h-full flex md:px-2">
       <SideMenu role={role} />
@@ -60,20 +65,17 @@ const CmsLayout = async ({
                   variant="ghost"
                   className="overflow-hidden rounded-full w-11 h-11 p-0"
                 >
-                  {session.user?.image ? (
-                    <Image
-                      src={session.user.image}
-                      width={44}
-                      height={44}
-                      alt="Avatar"
-                    />
+                  {userPic ? (
+                    <Image src={userPic} width={44} height={44} alt="Avatar" />
                   ) : (
                     <CircleUser strokeWidth={1} size={44} />
                   )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {user?.name ?? session.user.name}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <LogoutMenuItem />
               </DropdownMenuContent>

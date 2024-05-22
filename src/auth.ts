@@ -17,6 +17,13 @@ declare module "next-auth" {
   }
 }
 
+declare module "@auth/core/jwt" {
+  interface JWT {
+    role?: UserRole;
+    
+  }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/cms/login",
